@@ -1,0 +1,65 @@
+#!/bin/bash
+
+classname=$1
+supername=$2
+classnamelower=$(echo "$classname" | tr '[:upper:]' '[:lower:]')
+classnameupper=$(echo "$classname" | tr '[:lower:]' '[:upper:]')
+supernamelower=$(echo "$supername" | tr '[:upper:]' '[:lower:]')
+h=${classnamelower}.h
+cpp=${classnamelower}.cpp
+
+##############################################################################
+if [ -f ${h} ];
+then
+echo "h file exists: NOT DOING IT"
+else
+echo "// ${classnamelower}.h
+
+#ifndef ${classnameupper}_H
+#define ${classnameupper}_H
+" >> ${h}
+
+if [ -n "$2" ]; then
+echo "#include <${supernamelower}.h>
+
+class ${classname}: public ${supername}" >> ${h}
+else
+echo "class ${classname}" >> ${h}
+fi
+
+echo "{
+public:
+	${classname}();
+	virtual ~${classname}();
+
+private:
+	/* add your private declarations */
+};
+
+#endif /* ${classnameupper}_H */" >> ${h}
+fi
+
+##############################################################################
+if [ -f ${cpp} ];
+then
+echo "cpp file exists: NOT DOING IT"
+else
+echo "// ${classnamelower}.cpp
+
+#include \"${classnamelower}.h\"
+
+${classname}::${classname}()" >> ${cpp}
+
+if [ -n "$2" ]; then
+echo "	: ${supername}()" >> ${cpp}
+fi
+
+echo "{
+
+}
+
+${classname}::~${classname}()
+{
+
+}" >> ${cpp}
+fi

@@ -4,6 +4,7 @@ project (rt2d)
 
 # delete CMakeCache.txt from the build directory when you edit these options
 ####################################################################
+OPTION(MAKE_DVB "Make DvB application" ON)
 OPTION(MAKE_START "Make RT2D start application" ON)
 OPTION(MAKE_DEMO "Make RT2D demo (tests) application" ON)
 OPTION(MAKE_CANVAS_DEMO "Make RT2D Canvas demo (tests) application" ON)
@@ -165,6 +166,35 @@ IF(MAKE_START)
 	# Copy assets to the build directory
 	file(
 		COPY start/assets
+		DESTINATION ${CMAKE_BINARY_DIR}
+	)
+ENDIF()
+
+
+####################################################################
+# DvB                                                            #
+####################################################################
+IF(MAKE_DVB)
+	add_executable(dvb
+		DvB/main.cpp
+		DvB/enemy.cpp
+		DvB/enemy.h
+		DvB/myscene.cpp
+		DvB/myscene.h
+		DvB/player.cpp
+		DvB/player.h
+		DvB/treelog.cpp
+		DvB/treelog.h
+		DvB/arrow.h
+		DvB/arrow.cpp
+		
+	)
+	target_link_libraries(dvb
+		${ALL_GRAPHICS_LIBS}
+	)
+	# Copy assets to the build directory
+	file(
+		COPY dvb/assets
 		DESTINATION ${CMAKE_BINARY_DIR}
 	)
 ENDIF()
