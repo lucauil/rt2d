@@ -4,7 +4,7 @@
 Player* player;
 Player::Player(): Entity()
 {
-	this->addSprite("assets/square.tga");
+	this->addSprite("assets/bow.tga");
 }
 
 Player::~Player()
@@ -27,6 +27,9 @@ Player::~Player()
 
 void Player::update(float deltaTime)
 {
-	// this->position.x += deltaTime; // 90 deg/sec
+	// if (this->position.x < SWIDTH-50)
+	// {
+	// 	this->position.x += deltaTime * 0;
+	// }
 	
 }

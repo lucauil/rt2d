@@ -4,11 +4,15 @@
 
 Arrow::Arrow() : Entity()
 {
-this->addSprite("assets/arrow.tga");
+    this->addSprite("assets/arrow.tga");
 }
 
 
 Arrow::~Arrow()
 {
 
+}
+void Arrow::update(float deltaTime)
+{
+	this->position.y -= deltaTime * 200;
 }

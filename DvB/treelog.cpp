@@ -2,12 +2,22 @@
 
 #include "treelog.h"
 
-Treelog::Treelog()
-{
+//float scr_width = ScreenSize.X;
 
+Treelog::Treelog(): Entity()
+{
+	this->addSprite("assets/log.tga");
 }
 
 Treelog::~Treelog()
 {
 
+}
+
+void Treelog::update(float deltaTime)
+{
+	if (this->position.y < SHEIGHT-50)
+	{
+		this->position.y += deltaTime * 100;
+	}
 }
