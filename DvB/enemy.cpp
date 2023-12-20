@@ -1,13 +1,17 @@
-// enemy.cpp
-
 #include "enemy.h"
 
-Enemy::Enemy()
+Enemy::Enemy(): Entity()
 {
-
+	this->addSprite("assets/bph.tga");
+	this->alive = true;
 }
 
 Enemy::~Enemy()
 {
 
+}
+
+void Enemy::update(float deltaTime)
+{
+	
 }

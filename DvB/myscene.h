@@ -14,6 +14,7 @@
 #include "player.h"
 #include "arrow.h"
 #include "treelog.h"
+#include "enemy.h"
 
 /// @brief The MyScene class is the Scene implementation.
 class MyScene : public Scene
@@ -39,10 +40,20 @@ private:
 	void updatePlayer();
 	void restart();
 	Player* player;
-	//Treelog* Treelog;
+	
 	
 	std::vector<Arrow*> arrows;
 	std::vector<Treelog*> treelogs;
+	std::vector<Enemy*> enemies;
+
+	void CheckCollisionArrowLogs();
+	void CheckCollisionPlayerLogs();
+	//void CheckCollisionEnemyArrows();
+	void HandleInput(float deltaTime);
+	void CleanUptAbles();
+	void SpawnTreeLogs(float deltatime);
+	void Zmove(float deltaTime);
+	void logforlog();
 };
 
 #endif /* SCENE00_H */

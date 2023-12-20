@@ -1,7 +1,7 @@
 // player.h
 
-#ifndef MYENTITY_H
-#define MYENTITY_H
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include <rt2d/entity.h>
 

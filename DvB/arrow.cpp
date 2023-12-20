@@ -5,6 +5,7 @@
 Arrow::Arrow() : Entity()
 {
     this->addSprite("assets/arrow.tga");
+    this->alive = true;
 }
 
 
