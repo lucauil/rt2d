@@ -39,11 +39,6 @@ MyScene::MyScene() : Scene()
 	//lives = maxlives;
 
 	restart();
-
-	Treelog* log = new Treelog();
-	this->addChild(log);
-	treelogs.push_back(log);
-	log->position = enemy->position;
 	
 }
 
@@ -142,22 +137,12 @@ void MyScene::SpawnTreeLogs(float deltatime)
 	if (t.seconds() > 2.0f)
 	{
 		Treelog* log = new Treelog();
-		log->position = Vector2(rand()%SWIDTH, 50);
+		float xpos = (rand()%10) * 128 + 64;
+		log->position = Vector2(xpos, 50);
 		this->addChild(log);
 		treelogs.push_back(log);
 		t.start();
 	}
-	
-	// for (int i = -0; i < 1; i++)
-	// {
-	// 	Treelog* log = new Treelog();
-	// 	this->addChild(log);
-	// 	treelogs.push_back(log);
-	// 	Vector2 ep = player->position;
-	// 	log->position = Vector2(ep.x - (i * 1), SHEIGHT +20);
-	// }
-
-	
 }
 
 void MyScene::logforlog()
@@ -243,7 +228,7 @@ void MyScene::HandleInput(float deltaTime)
 	// ###############################################################
 	if (input()->getKeyUp(KeyCode::Escape)) 
 	{
-	this->stop();
+		this->stop();
 	}
 
 	if (input()->getKeyDown( KeyCode::Space )) 
