@@ -48,12 +48,13 @@ private:
 
 	void CheckCollisionArrowLogs();
 	void CheckCollisionPlayerLogs();
-	//void CheckCollisionEnemyArrows();
+	void CheckCollisionEnemyArrows();
 	void HandleInput(float deltaTime);
 	void CleanUptAbles();
 	void SpawnTreeLogs(float deltatime);
 	void Zmove(float deltaTime);
 	void logforlog();
+	void SpawnEnemy();
 };
 
 #endif /* SCENE00_H */

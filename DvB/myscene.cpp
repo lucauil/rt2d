@@ -20,20 +20,20 @@ MyScene::MyScene() : Scene()
 	t.start();
 
 	arrows = std::vector<Arrow*>();
-	// treelogs = std::vector<Treelog*>();
+	treelogs = std::vector<Treelog*>();
+	// enemies = std::vector<Enemy*>();
 
 	// create a single instance of MyEntity in the middle of the screen.
 	// the Sprite is added in Constructor of MyEntity.
 	player = new Player();
-	Enemy* enemy = new Enemy();
 	
 	player->position = Point2(SWIDTH/2, SHEIGHT-20);
-	enemy->position = Point2(SWIDTH/2,50);
+	
 
 	// create the scene 'tree'
 	// add myentity to this Scene as a child.
 	this->addChild(player);
-	this->addChild(enemy);
+	
 
 	
 	//lives = maxlives;
@@ -63,9 +63,7 @@ void MyScene::restart()
 {
 	
 	//lives = maxlives;
-	//player->position.x = 640;
-
-	//player_bullets.clear();
+	
 	
 
 	
@@ -83,7 +81,7 @@ void MyScene::update(float deltaTime)
 	SpawnTreeLogs(deltaTime);
 	Zmove(deltaTime);
 	logforlog();
-	
+	SpawnEnemy();
 	
 	// if (enemies.empty()) 
 	// {
@@ -99,7 +97,7 @@ void MyScene::CleanUptAbles()
 {
 	if (arrows.empty()) { return; }
 	if (treelogs.empty()) { return; }
-	//if (enemies.empty()) { return; }
+	// if (enemies.empty()) { return; }
 	
 	for (int i = arrows.size()-1; i >= 0; i--)
 	{
@@ -123,13 +121,24 @@ void MyScene::CleanUptAbles()
 
 	// for (int i = enemies.size()-1; i >= 0; i--)
 	// {
-	// 	if (!enemies[i]->alive)
-	// 	{
-	// 		this->removeChild(enemies[i]);
-	// 		delete enemies[i];
-	// 		enemies.erase(enemies.begin() + i);
-	// 	}
+	//  	if (!enemies[i]->alive)
+	//  	{
+	//  		this->removeChild(enemies[i]);
+	//  		delete enemies[i];
+	//  		enemies.erase(enemies.begin() + i);
+	//  	}
 	// }
+}
+
+void MyScene::SpawnEnemy()
+{
+	
+		Enemy* enemy = new Enemy();
+		float xpos = (rand()%10) * 128 + 64;
+		enemy->position = Vector2(xpos, 50);
+		this->addChild(enemy);
+	
+	
 }
 
 void MyScene::SpawnTreeLogs(float deltatime)
@@ -200,26 +209,26 @@ void MyScene::CheckCollisionPlayerLogs()
 	}	
 }
 
-//void MyScene::CheckCollisionEnemyArrows()
-//{
-	// for (size_t ey = 0; ey < enemies.size(); ey++)
-	// {
-	// 	for (size_t ars = 0; ars < arrows.size(); ars++)
-	// 	{
-	// 		Vector2 diff = enemies[ey]->position - arrows[ars]->position;
-	// 		float distance = diff.getLength();
-	// 		if (distance < 90) {
-	// 			arrows[ars]->sprite()->color = RED;
-	// 			arrows[ars]->alive = false;
-	// 			enemies[ey]->alive = false;
-	// 		} else {
-	// 			arrows[ars]->sprite()->color = WHITE;
-	// 		}
-	// 	}
+// void MyScene::CheckCollisionEnemyArrows()
+// {
+// 	for (size_t ey = 0; ey < enemies.size(); ey++)
+// 	{
+// 	 	for (size_t ars = 0; ars < arrows.size(); ars++)
+// 	 	{
+// 	 		Vector2 diff = enemies[ey]->position - arrows[ars]->position;
+// 	 		float distance = diff.getLength();
+// 	 		if (distance < 90) {
+// 	 			arrows[ars]->sprite()->color = RED;
+// 	 			arrows[ars]->alive = false;
+// 	 			enemies[ey]->alive = false;
+// 	 		} else {
+// 	 			arrows[ars]->sprite()->color = WHITE;
+// 	 		}
+// 	 	}
 		
-	// }
+// 	}
 	
-//}
+// }
 
 void MyScene::HandleInput(float deltaTime)
 {
