@@ -34,7 +34,7 @@ MyScene::MyScene() : Scene()
 	// add myentity to this Scene as a child.
 	this->addChild(player);
 	
-
+	SpawnEnemy();
 	
 	//lives = maxlives;
 
@@ -76,19 +76,19 @@ void MyScene::update(float deltaTime)
 	HandleInput(deltaTime);
 	CheckCollisionArrowLogs();
 	CheckCollisionPlayerLogs();
-	//CheckCollisionEnemyArrows();
+	CheckCollisionEnemyArrows();
 	CleanUptAbles();
 	SpawnTreeLogs(deltaTime);
 	Zmove(deltaTime);
 	logforlog();
-	SpawnEnemy();
 	
-	// if (enemies.empty()) 
-	// {
-	// 	std::cout << "WELL DONE EARTHLING" << std::endl;
-	// 	std::cout << "THIS TIME YOU WIN" << std::endl;
-	// 	restart();
-	// }
+	
+	if (enemies.empty()) 
+	{
+		std::cout << "WELL DONE EARTHLING" << std::endl;
+		std::cout << "THIS TIME YOU WIN" << std::endl;
+		restart();
+	}
 }
 
 
@@ -97,7 +97,7 @@ void MyScene::CleanUptAbles()
 {
 	if (arrows.empty()) { return; }
 	if (treelogs.empty()) { return; }
-	// if (enemies.empty()) { return; }
+	if (enemies.empty()) { return; }
 	
 	for (int i = arrows.size()-1; i >= 0; i--)
 	{
@@ -119,34 +119,40 @@ void MyScene::CleanUptAbles()
 		}
 	}
 
-	// for (int i = enemies.size()-1; i >= 0; i--)
-	// {
-	//  	if (!enemies[i]->alive)
-	//  	{
-	//  		this->removeChild(enemies[i]);
-	//  		delete enemies[i];
-	//  		enemies.erase(enemies.begin() + i);
-	//  	}
-	// }
+	for (int i = enemies.size()-1; i >= 0; i--)
+	{
+	 	if (!enemies[i]->alive)
+	 	{
+	 		this->removeChild(enemies[i]);
+	 		delete enemies[i];
+	 		enemies.erase(enemies.begin() + i);
+	 	}
+	}
 }
 
 void MyScene::SpawnEnemy()
 {
-	
+	for (size_t i = 0; i < 10; i++)
+	{
 		Enemy* enemy = new Enemy();
-		float xpos = (rand()%10) * 128 + 64;
+		// float xpos = (rand()%10) * 128 + 64;
+		float xpos = i * 128 + 64;
 		enemy->position = Vector2(xpos, 50);
 		this->addChild(enemy);
-	
-	
+		enemies.push_back(enemy);
+	}
 }
 
 void MyScene::SpawnTreeLogs(float deltatime)
 {
 	if (t.seconds() > 2.0f)
 	{
+		size_t numerOfBeavers = enemies.size();
+		size_t randomBeaverIndex = rand()%numerOfBeavers;
+
 		Treelog* log = new Treelog();
-		float xpos = (rand()%10) * 128 + 64;
+		//float xpos = (rand()%10) * 128 + 64;
+		float xpos = enemies[randomBeaverIndex]->position.x;
 		log->position = Vector2(xpos, 50);
 		this->addChild(log);
 		treelogs.push_back(log);
@@ -154,11 +160,20 @@ void MyScene::SpawnTreeLogs(float deltatime)
 	}
 }
 
+void MyScene::gameover(float)
+{
+	// if (treelogs ==10 = Vector2(xpos, 50)) 
+	// {
+	//   	std::cout << "GAME OVER" << std::endl;
+	//   	restart();
+	// }
+}
+
 void MyScene::logforlog()
 {
 	// for (size_t i = 0; i < count; i++)
 	// {
-	// 	this->
+	//  	this->
 	// }
 	
 }
@@ -209,26 +224,26 @@ void MyScene::CheckCollisionPlayerLogs()
 	}	
 }
 
-// void MyScene::CheckCollisionEnemyArrows()
-// {
-// 	for (size_t ey = 0; ey < enemies.size(); ey++)
-// 	{
-// 	 	for (size_t ars = 0; ars < arrows.size(); ars++)
-// 	 	{
-// 	 		Vector2 diff = enemies[ey]->position - arrows[ars]->position;
-// 	 		float distance = diff.getLength();
-// 	 		if (distance < 90) {
-// 	 			arrows[ars]->sprite()->color = RED;
-// 	 			arrows[ars]->alive = false;
-// 	 			enemies[ey]->alive = false;
-// 	 		} else {
-// 	 			arrows[ars]->sprite()->color = WHITE;
-// 	 		}
-// 	 	}
+void MyScene::CheckCollisionEnemyArrows()
+{
+ 	for (size_t ey = 0; ey < enemies.size(); ey++)
+ 	{
+ 	 	for (size_t ars = 0; ars < arrows.size(); ars++)
+ 	 	{
+ 	 		Vector2 diff = enemies[ey]->position - arrows[ars]->position;
+ 	 		float distance = diff.getLength();
+ 	 		if (distance < 90) {
+ 	 			arrows[ars]->sprite()->color = RED;
+ 	 			arrows[ars]->alive = false;
+ 	 			enemies[ey]->alive = false;
+ 	 		} else {
+ 	 			arrows[ars]->sprite()->color = WHITE;
+ 	 		}
+ 	 	}
 		
-// 	}
+ 	}
 	
-// }
+}
 
 void MyScene::HandleInput(float deltaTime)
 {
@@ -274,17 +289,24 @@ void MyScene::HandleInput(float deltaTime)
 
 void MyScene::Zmove(float deltaTime)
 {
-
-	if (input()->getKeyDown( KeyCode::Z )) 
-	{
-		for (int i = -12; i < 13; i++)
+	// if (t.seconds() == 10.0f)
+	// {
+		if (input()->getKeyDown( KeyCode::Z )) 
 		{
-			Arrow* arrow = new Arrow();
-			this->addChild(arrow);
-			arrows.push_back(arrow);
-			Vector2 pp = player->position;
-			arrow->position = Vector2(pp.x - (i * 20), SHEIGHT-20);
+			for (int i = -12; i < 13; i++)
+			{
+				Arrow* arrow = new Arrow();
+				this->addChild(arrow);
+				arrows.push_back(arrow);
+				Vector2 pp = player->position;
+				arrow->position = Vector2(pp.x - (i * 20), SHEIGHT-20);
+			}
 		}
-	}
+		// t.start();
+	//}
 
+	// else
+	// {
+	// 	input()->getKey(KeyCode::M );
+	// }
 }

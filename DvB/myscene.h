@@ -54,6 +54,7 @@ private:
 	void SpawnTreeLogs(float deltatime);
 	void Zmove(float deltaTime);
 	void logforlog();
+	void gameover(float xx);
 	void SpawnEnemy();
 };
 
