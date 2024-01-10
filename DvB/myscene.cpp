@@ -15,6 +15,13 @@ int speed = 200;
 
 MyScene::MyScene() : Scene()
 {
+	background = new Background();
+	// background->scale = Point2(3, 1.5);
+    background->position = Point2(SWIDTH / 2, SHEIGHT / 2);
+    //BackGroundEntity->scale == Point(SWIDTH / 512, SHEIGHT / 512);
+
+    this->addChild(background);
+
 	lives = 3;
 	// start the timer.
 	t.start();

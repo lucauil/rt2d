@@ -187,6 +187,8 @@ IF(MAKE_DVB)
 		DvB/treelog.h
 		DvB/arrow.h
 		DvB/arrow.cpp
+		DvB/background.h
+		DvB/background.cpp
 	)
 	target_link_libraries(dvb
 		${ALL_GRAPHICS_LIBS}

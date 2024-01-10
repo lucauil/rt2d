@@ -17,7 +17,7 @@ Treelog::~Treelog()
 
 void Treelog::update(float deltaTime)
 {
-	if (this->position.y < SHEIGHT-50)
+	if (this->position.y < SHEIGHT-150)
 	{
 	 	this->position.y += deltaTime * 100;
 	}
