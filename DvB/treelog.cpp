@@ -2,7 +2,7 @@
 
 #include "treelog.h"
 
-//float scr_width = ScreenSize.X;
+
 
 Treelog::Treelog(): Entity()
 {
@@ -17,7 +17,7 @@ Treelog::~Treelog()
 
 void Treelog::update(float deltaTime)
 {
-	if (this->position.y < SHEIGHT-150)
+	if (this->position.y < SHEIGHT-50)
 	{
 	 	this->position.y += deltaTime * 100;
 	}

@@ -16,26 +16,33 @@ int speed = 200;
 MyScene::MyScene() : Scene()
 {
 	background = new Background();
-	// background->scale = Point2(3, 1.5);
+	background->scale = Point2(1.3, 1);
     background->position = Point2(SWIDTH / 2, SHEIGHT / 2);
-    //BackGroundEntity->scale == Point(SWIDTH / 512, SHEIGHT / 512);
+    
 
     this->addChild(background);
 
 	lives = 3;
 	// start the timer.
 	t.start();
-
+	shoottimer.start();
 	arrows = std::vector<Arrow*>();
 	treelogs = std::vector<Treelog*>();
-	// enemies = std::vector<Enemy*>();
 
-	// create a single instance of MyEntity in the middle of the screen.
-	// the Sprite is added in Constructor of MyEntity.
+
+	xpositions = std::vector<int>();
+	for (size_t i = 0; i < 10; i++)
+	{
+		int xpos = i * 128 + 64;
+		xpositions.push_back(xpos);
+	}
+	
+
 	player = new Player();
+	player->position = Point2(SWIDTH/2, SHEIGHT-180);
 	
-	player->position = Point2(SWIDTH/2, SHEIGHT-20);
-	
+	gameclear = new Gameclear();
+	gameclear->position = Point2(SWIDTH/2, SHEIGHT/2);
 
 	// create the scene 'tree'
 	// add myentity to this Scene as a child.
@@ -88,13 +95,12 @@ void MyScene::update(float deltaTime)
 	SpawnTreeLogs(deltaTime);
 	Zmove(deltaTime);
 	logforlog();
-	
+	gameover();
 	
 	if (enemies.empty()) 
 	{
-		std::cout << "WELL DONE EARTHLING" << std::endl;
-		std::cout << "THIS TIME YOU WIN" << std::endl;
-		restart();
+		this->addChild(gameclear);
+		t.stop();
 	}
 }
 
@@ -142,9 +148,8 @@ void MyScene::SpawnEnemy()
 	for (size_t i = 0; i < 10; i++)
 	{
 		Enemy* enemy = new Enemy();
-		// float xpos = (rand()%10) * 128 + 64;
 		float xpos = i * 128 + 64;
-		enemy->position = Vector2(xpos, 50);
+		enemy->position = Vector2(xpos, 60);
 		this->addChild(enemy);
 		enemies.push_back(enemy);
 	}
@@ -167,21 +172,65 @@ void MyScene::SpawnTreeLogs(float deltatime)
 	}
 }
 
-void MyScene::gameover(float)
+void MyScene::gameover()
 {
-	// if (treelogs ==10 = Vector2(xpos, 50)) 
+	int numberoflogsonthebottom = 0;
+	for (size_t i = 0; i < xpositions.size(); i++)
+	{
+		for (size_t tl = 0; tl < treelogs.size(); tl++)
+		{
+			if (treelogs[tl]->position.x == xpositions[i] && 
+				(treelogs[tl]->position.y >= SHEIGHT - (treelogs[tl]->sprite()->height() / 2))
+			)
+			{
+				// treelog on this position.
+				// possibly game over
+				numberoflogsonthebottom++;
+			}
+			else
+			{
+				// no treelog on this position
+				// definitely not game over
+			}
+		}
+		
+		if (numberoflogsonthebottom == 10)
+		{
+			std::cout << "GAME OVER" << std::endl;
+		}
+	  	// if (treelogs[i]->position.y >= SHEIGHT - (treelogs[i]->sprite()->height() - SHEIGHT/ 2))
+		// {
+			
+		// }
+	}
+
+
+	// int numenemies = 10;
+	// int numberoflogsonthebottom = 0;
+	// for (size_t b = 0; b < numenemies; b++)
 	// {
-	//   	std::cout << "GAME OVER" << std::endl;
-	//   	restart();
+	// 	float xpos = enemies[b]->position.x;
+	// 	for (size_t l = 0; l < treelogs.size(); l++)
+	// 	{
+	// 		if (treelogs[l]->position.x == xpos)
+	// 		{
+	// 			numberoflogsonthebottom++;
+	// 		}
+	// 	}
 	// }
+	// if (numberoflogsonthebottom == numenemies)
+	// {
+	// 	// GAME OVER
+	// 	std::cout << "GAME OVER" << std::endl;
+	// }
+
+
+
 }
 
 void MyScene::logforlog()
 {
-	// for (size_t i = 0; i < count; i++)
-	// {
-	//  	this->
-	// }
+	
 	
 }
 
@@ -296,9 +345,9 @@ void MyScene::HandleInput(float deltaTime)
 
 void MyScene::Zmove(float deltaTime)
 {
-	// if (t.seconds() == 10.0f)
-	// {
-		if (input()->getKeyDown( KeyCode::Z )) 
+	if (input()->getKeyDown( KeyCode::Z )) 
+	{
+		if (shoottimer.seconds() > 2.0f)
 		{
 			for (int i = -12; i < 13; i++)
 			{
@@ -306,14 +355,10 @@ void MyScene::Zmove(float deltaTime)
 				this->addChild(arrow);
 				arrows.push_back(arrow);
 				Vector2 pp = player->position;
-				arrow->position = Vector2(pp.x - (i * 20), SHEIGHT-20);
+				arrow->position = Vector2(pp.x - (i * 20), SHEIGHT-100);
 			}
+			shoottimer.start();
 		}
-		// t.start();
-	//}
-
-	// else
-	// {
-	// 	input()->getKey(KeyCode::M );
-	// }
+		
+	}
 }

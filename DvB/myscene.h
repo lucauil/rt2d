@@ -16,6 +16,7 @@
 #include "treelog.h"
 #include "enemy.h"
 #include "background.h"
+#include "gameclear.h"
 
 /// @brief The MyScene class is the Scene implementation.
 class MyScene : public Scene
@@ -37,16 +38,20 @@ private:
 	/// @brief a Timer to rotate the color every n seconds
 
 	Timer t;
+	Timer shoottimer;
 	int lives;
 	void updatePlayer();
 	void restart();
 	Player* player;
 	Background* background;
+	Gameclear* gameclear;
 	
 	
 	std::vector<Arrow*> arrows;
 	std::vector<Treelog*> treelogs;
 	std::vector<Enemy*> enemies;
+
+	std::vector<int> xpositions;
 
 	void CheckCollisionArrowLogs();
 	void CheckCollisionPlayerLogs();
@@ -56,7 +61,7 @@ private:
 	void SpawnTreeLogs(float deltatime);
 	void Zmove(float deltaTime);
 	void logforlog();
-	void gameover(float xx);
+	void gameover();
 	void SpawnEnemy();
 };
 
