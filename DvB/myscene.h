@@ -10,6 +10,7 @@
 #define MYSCENE_H
 
 #include <rt2d/scene.h>
+#include <rt2d/text.h>
 
 #include "player.h"
 #include "arrow.h"
@@ -45,6 +46,8 @@ private:
 	Player* player;
 	Background* background;
 	Gameclear* gameclear;
+	bool gameIsOver;
+	Text* gameText;
 	
 	
 	std::vector<Arrow*> arrows;

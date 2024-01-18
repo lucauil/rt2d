@@ -41,8 +41,7 @@ MyScene::MyScene() : Scene()
 	player = new Player();
 	player->position = Point2(SWIDTH/2, SHEIGHT-180);
 	
-	gameclear = new Gameclear();
-	gameclear->position = Point2(SWIDTH/2, SHEIGHT/2);
+	
 
 	// create the scene 'tree'
 	// add myentity to this Scene as a child.
@@ -51,6 +50,12 @@ MyScene::MyScene() : Scene()
 	SpawnEnemy();
 	
 	//lives = maxlives;
+	gameIsOver = false;
+
+
+	gameText = new Text();
+	gameText->position = Vector2(SWIDTH / 2, SHEIGHT / 2);
+	this->addChild(gameText);
 
 	restart();
 	
@@ -76,11 +81,7 @@ MyScene::~MyScene()
 void MyScene::restart()
 {
 	
-	//lives = maxlives;
-	
-	
-
-	
+	//lives = maxlives;	
 }
 
 
@@ -99,8 +100,8 @@ void MyScene::update(float deltaTime)
 	
 	if (enemies.empty()) 
 	{
-		this->addChild(gameclear);
-		t.stop();
+		gameText->message("Game Clear");
+		gameIsOver = true;
 	}
 }
 
@@ -157,6 +158,8 @@ void MyScene::SpawnEnemy()
 
 void MyScene::SpawnTreeLogs(float deltatime)
 {
+	if (gameIsOver) return;
+	
 	if (t.seconds() > 2.0f)
 	{
 		size_t numerOfBeavers = enemies.size();
@@ -196,35 +199,10 @@ void MyScene::gameover()
 		
 		if (numberoflogsonthebottom == 10)
 		{
-			std::cout << "GAME OVER" << std::endl;
+			gameIsOver = true;
+			gameText->message("GAME OVER",RED);
 		}
-	  	// if (treelogs[i]->position.y >= SHEIGHT - (treelogs[i]->sprite()->height() - SHEIGHT/ 2))
-		// {
-			
-		// }
 	}
-
-
-	// int numenemies = 10;
-	// int numberoflogsonthebottom = 0;
-	// for (size_t b = 0; b < numenemies; b++)
-	// {
-	// 	float xpos = enemies[b]->position.x;
-	// 	for (size_t l = 0; l < treelogs.size(); l++)
-	// 	{
-	// 		if (treelogs[l]->position.x == xpos)
-	// 		{
-	// 			numberoflogsonthebottom++;
-	// 		}
-	// 	}
-	// }
-	// if (numberoflogsonthebottom == numenemies)
-	// {
-	// 	// GAME OVER
-	// 	std::cout << "GAME OVER" << std::endl;
-	// }
-
-
 
 }
 
@@ -311,6 +289,8 @@ void MyScene::HandleInput(float deltaTime)
 		this->stop();
 	}
 
+	if (gameIsOver) return;
+
 	if (input()->getKeyDown( KeyCode::Space )) 
 	{
 		Arrow* arrow = new Arrow();
@@ -355,7 +335,7 @@ void MyScene::Zmove(float deltaTime)
 				this->addChild(arrow);
 				arrows.push_back(arrow);
 				Vector2 pp = player->position;
-				arrow->position = Vector2(pp.x - (i * 20), SHEIGHT-100);
+				arrow->position = Vector2(pp.x - (i * 20), SHEIGHT-180);
 			}
 			shoottimer.start();
 		}
