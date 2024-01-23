@@ -2,7 +2,7 @@
 
 Player::Player(): Entity()
 {
-	this->addSprite("assets/bow.tga");
+	this->addSprite("assets/decidueye.tga");
 }
 
 Player::~Player()

@@ -57,7 +57,7 @@ MyScene::MyScene() : Scene()
 	gameText->position = Vector2(SWIDTH / 2, SHEIGHT / 2);
 	this->addChild(gameText);
 
-	restart();
+	
 	
 }
 
@@ -80,7 +80,67 @@ MyScene::~MyScene()
 
 void MyScene::restart()
 {
+	this->removeChild(player);
+	this->removeChild(gameText);
 	
+	delete player;
+	delete gameText;
+	
+	for (int i = arrows.size() - 1; i >= 0; i--)
+	{
+		removeChild(arrows[i]);
+		delete arrows[i];
+	}
+	arrows.clear();
+
+	for (int i = treelogs.size() - 1; i >= 0; i--)
+	{
+		removeChild(treelogs[i]);
+		delete treelogs[i];
+	}
+	treelogs.clear();
+
+	
+	for (int i = treelogs.size() - 1; i >= 0; i--)
+	{
+		removeChild(treelogs[i]);
+		delete treelogs[i];
+	}
+	treelogs.clear();
+	
+	t.start();
+	shoottimer.start();
+	// arrows = std::vector<Arrow*>();
+	// treelogs = std::vector<Treelog*>();
+
+
+	xpositions = std::vector<int>();
+	for (size_t i = 0; i < 10; i++)
+	{
+		int xpos = i * 128 + 64;
+		xpositions.push_back(xpos);
+	}
+	
+
+	player = new Player();
+	player->position = Point2(SWIDTH/2, SHEIGHT-180);
+	
+	
+
+	// create the scene 'tree'
+	// add myentity to this Scene as a child.
+	this->addChild(player);
+	
+	SpawnEnemy();
+	
+	//lives = maxlives;
+	gameIsOver = false;
+
+
+	gameText = new Text();
+	gameText->position = Vector2(SWIDTH / 2, SHEIGHT / 2);
+	this->addChild(gameText);
+
 	//lives = maxlives;	
 }
 
@@ -95,7 +155,7 @@ void MyScene::update(float deltaTime)
 	CleanUptAbles();
 	SpawnTreeLogs(deltaTime);
 	Zmove(deltaTime);
-	logforlog();
+	
 	gameover();
 	
 	if (enemies.empty()) 
@@ -177,7 +237,9 @@ void MyScene::SpawnTreeLogs(float deltatime)
 
 void MyScene::gameover()
 {
-	int numberoflogsonthebottom = 0;
+	// int numberoflogsonthebottom = 0;
+	std::vector<int> logpos = std::vector<int>();
+	logpos.resize(10);
 	for (size_t i = 0; i < xpositions.size(); i++)
 	{
 		for (size_t tl = 0; tl < treelogs.size(); tl++)
@@ -188,7 +250,8 @@ void MyScene::gameover()
 			{
 				// treelog on this position.
 				// possibly game over
-				numberoflogsonthebottom++;
+				// numberoflogsonthebottom++;
+				logpos[i] = 1;
 			}
 			else
 			{
@@ -197,20 +260,27 @@ void MyScene::gameover()
 			}
 		}
 		
-		if (numberoflogsonthebottom == 10)
+		// if (numberoflogsonthebottom == 10)
+		// {
+		// 	gameIsOver = true;
+		// 	gameText->message("GAME OVER",RED);
+		// }
+
+		int sum = 0;
+		for (size_t i = 0; i < logpos.size(); i++)
+		{
+			sum += logpos[i];
+		}
+		if (sum == 10)
 		{
 			gameIsOver = true;
 			gameText->message("GAME OVER",RED);
 		}
+		
 	}
 
 }
 
-void MyScene::logforlog()
-{
-	
-	
-}
 
 void MyScene::CheckCollisionArrowLogs()
 {
@@ -289,6 +359,12 @@ void MyScene::HandleInput(float deltaTime)
 		this->stop();
 	}
 
+	if (input()->getKeyUp(KeyCode::R)) 
+	{
+		restart();
+		
+	}
+
 	if (gameIsOver) return;
 
 	if (input()->getKeyDown( KeyCode::Space )) 
@@ -321,13 +397,34 @@ void MyScene::HandleInput(float deltaTime)
 	{
 		player->position.x = 50;
 	}
+
+	if (input()->getKey(KeyCode::A)) 
+	{
+		player->position.x -= speed*deltaTime;
+	}
+
+	
+		
+	
+	if (input()->getKey(KeyCode::D)) 
+	{
+		player->position.x += speed*deltaTime;
+	}
+	if (player->position.x > SWIDTH-50)
+	{
+		player->position.x = SWIDTH-50;
+	}
+	if (player->position.x < 50)
+	{
+		player->position.x = 50;
+	}
 }
 
 void MyScene::Zmove(float deltaTime)
 {
 	if (input()->getKeyDown( KeyCode::Z )) 
 	{
-		if (shoottimer.seconds() > 2.0f)
+		if (shoottimer.seconds() > 5.0f)
 		{
 			for (int i = -12; i < 13; i++)
 			{

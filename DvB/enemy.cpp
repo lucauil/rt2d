@@ -2,7 +2,7 @@
 
 Enemy::Enemy(): Entity()
 {
-	this->addSprite("assets/bph.tga");
+	this->addSprite("assets/bibarel.tga");
 	this->alive = true;
 }
 

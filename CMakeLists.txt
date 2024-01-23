@@ -189,8 +189,7 @@ IF(MAKE_DVB)
 		DvB/arrow.cpp
 		DvB/background.h
 		DvB/background.cpp
-		DvB/gameclear.h
-		DvB/gameclear.cpp
+		
 	)
 	target_link_libraries(dvb
 		${ALL_GRAPHICS_LIBS}

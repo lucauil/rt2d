@@ -17,7 +17,7 @@
 #include "treelog.h"
 #include "enemy.h"
 #include "background.h"
-#include "gameclear.h"
+
 
 /// @brief The MyScene class is the Scene implementation.
 class MyScene : public Scene
@@ -45,7 +45,6 @@ private:
 	void restart();
 	Player* player;
 	Background* background;
-	Gameclear* gameclear;
 	bool gameIsOver;
 	Text* gameText;
 	
@@ -63,7 +62,6 @@ private:
 	void CleanUptAbles();
 	void SpawnTreeLogs(float deltatime);
 	void Zmove(float deltaTime);
-	void logforlog();
 	void gameover();
 	void SpawnEnemy();
 };

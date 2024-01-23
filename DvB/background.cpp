@@ -4,7 +4,7 @@
 
 Background::Background()
 {
-    this->addSprite("assets/rpt.tga");
+    this->addSprite("assets/river.tga");
 }
 
 Background::~Background()
